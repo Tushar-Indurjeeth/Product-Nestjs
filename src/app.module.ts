@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -9,10 +10,14 @@ import { ProductService } from './products/products.service';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     ProductsModule,
-    MongooseModule.forRoot('mongodb://localhost:27017', {
-      dbName: 'productdb',
-    }),
+    MongooseModule.forRoot(
+      `mongodb+srv://Admin:${process.env.DB_PASSWORD}@cluster0.fdocids.mongodb.net/?retryWrites=true&w=majority`,
+      {
+        dbName: 'productdb',
+      },
+    ),
     MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema }]),
   ],
   controllers: [AppController, ProductController],
